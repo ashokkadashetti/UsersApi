@@ -4,10 +4,10 @@
 
 ### Things coverd here:
 
-- Created User model (attributes => name,email,password,role).
-- Created Project model (attributes => name,description,idle,realtime,bill).
+- Created User model (attributes => name, email, password, role).
+- Created Project model (attributes => name, description, idle, realtime, bill).
 - Implemented one_to_has_many relationship between user and candidate model.
-- Created Candidate model (attributes => name,email,user_id).
+- Created Candidate model (attributes => name, email, user_id).
 - Added one USER to two models using users_controller.
 - Implemented exception handling for users_controller and candidates_controller.
 
