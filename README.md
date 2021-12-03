@@ -19,19 +19,18 @@
 
 ```ruby
 
-	def create
-		user = User.new(user_params)
+def create
+	user = User.new(user_params)
 
-		if user.save
-			candidate = Candidate.new(user_id:user.id, name:user.name, email:user.email)
+	if user.save
+		candidate = Candidate.new(user_id:user.id, name:user.name, email:user.email)
 
-			if candidate.save
-				render json: {status: 'Success', message: 'Record saved', data:user}, status: :ok
-			else
-				render json: {status: 'Error', message: 'User not saved', data:user.error}, status: :unprocessable_entity
-			end
+		if candidate.save
+			render json: {status: 'Success', message: 'Record saved', data:user}, status: :ok
+		else
+			render json: {status: 'Error', message: 'User not saved', data:user.error}, status: :unprocessable_entity
 		end
-
 	end
+end
 ```
 
