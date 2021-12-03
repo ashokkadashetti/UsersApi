@@ -18,5 +18,4 @@ class User < ApplicationRecord
 															   :update_only => true
 
 
-
 end
