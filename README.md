@@ -1,24 +1,37 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+> Created API for Users.
 
-Things you may want to cover:
+### Things coverd here:
 
-* Ruby version
+- Created User model (attributes => name,email,password,role).
+- Created Project model (attributes => name,description,idle,realtime,bill).
+- Implemented one_to_has_many relationship between user and candidate model.
+- Created Candidate model (attributes => name,email,user_id).
+- Added one USER to two models using users_controller.
+- Implemented exception handling for users_controller and candidates_controller.
 
-* System dependencies
 
-* Configuration
 
-* Database creation
+### Code to add user to two models (model => user and candidate)
 
-* Database initialization
+- If we add user to users model, then it will avilable in candidates model also.
 
-* How to run the test suite
+```ruby
 
-* Services (job queues, cache servers, search engines, etc.)
+	def create
+		user = User.new(user_params)
 
-* Deployment instructions
+		if user.save
+			candidate = Candidate.new(user_id:user.id, name:user.name, email:user.email)
 
-* ...
+			if candidate.save
+				render json: {status: 'Success', message: 'Record saved', data:user}, status: :ok
+			else
+				render json: {status: 'Error', message: 'User not saved', data:user.error}, status: :unprocessable_entity
+			end
+		end
+
+	end
+```
+
