@@ -28,11 +28,8 @@ module Api
 			def create
 				project = Project.new(project_params)
 				begin
-					if project.save
+					project.save!
 						render json: {status: 'Success', message: 'Saved project', data:project}, status: :ok
-					# else
-					# 	render json: {status: 'Error', message: 'Project not saved', data:project.error}, status: :unprocessable_entity
-					end
 				rescue
 					render json: {status: 'Error', message: 'Project not saved'}, status: :unprocessable_entity
 				end
@@ -55,11 +52,8 @@ module Api
 			def update
 				begin
 				project = Project.find(params[:id])
-					if project.update(project_params)
-						render json: {status: 'Success', message: 'Updated project', data:project}, status: :ok
-					# else
-					# 	render json: {status: 'Error', message: 'Project not updated', data:project.error}, status: :unprocessable_entity
-					end
+					project.update!(project_params)
+				    render json: {status: 'Success', message: 'Updated project', data:project}, status: :ok
 				rescue
 					render json: {status: 'Error', message: 'Project not updated'}, status: :unprocessable_entity
 				end
@@ -70,12 +64,7 @@ module Api
 			private
 
 			def project_params
-				begin
-				params.permit(:name,:description,:idle,:realtime,:bill)
-			 	rescue
-			 	render json: {status: 'Error', message: 'Record not found'}, status: :ok
-			    end
-
+				params.permit(:name,:description,:idle,:realtime, :bill)
 			end
 
 		end

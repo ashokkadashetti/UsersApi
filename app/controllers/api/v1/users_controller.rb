@@ -4,7 +4,7 @@ module Api
 
 			def index
 				begin
-					users = User.order('created_at DESC');
+					users = User.order('created_at ASC');
 					render json: {status: 'Success', message: 'Loaded users', data:users}, status: :ok	
 				rescue
 					render json: {status: 'Error', message: 'Unavailable'}, status: :unprocessable_entity
@@ -47,7 +47,7 @@ module Api
 			def destroy
 				begin
 					user = User.find(params[:id])
-					user.destroy
+					user.destroy!
 					render json: {status: 'Success', message: 'Deleted user', data:user}, status: :ok
 				rescue
 					render json: {status: 'Error', message: 'User not destroyed'}, status: :unprocessable_entity
@@ -60,9 +60,8 @@ module Api
 			def update
 				begin
 					user = User.find(params[:id])
-					if user.update(user_params)
+					user.update!(user_params)
 						render json: {status: 'Success', message: 'Updated user', data:user}, status: :ok
-				    end
 				rescue
 					render json: {status: 'Error', message: 'User not updated'}, status: :unprocessable_entity
 				end
@@ -73,12 +72,8 @@ module Api
 
 			private
 
-			def user_params
-				begin
-					params.require(:user).permit(:name,:email,:password,:role,candidates_attributes: [:name, :email])
-				rescue
-					render json: {status: 'Error', message: 'parameters error'}, status: :unprocessable_entity
-				end
+			def user_params	
+			  params.require(:user).permit(:name,:email,:password,:role)
 			end
 		end
 	end

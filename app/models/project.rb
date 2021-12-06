@@ -1,4 +1,7 @@
 class Project < ApplicationRecord
+
+	has_and_belongs_to_many :candidates
+
 	validates :name, presence: true
 	validates :description, presence: true
 	validates :idle, presence: true

@@ -13,13 +13,11 @@ module Api
 					render json: {status: 'Error', message: 'Email not valid'}, status: :unprocessable_entity
 				end
 			end
-
 #...................................................................................................................
 
 			def destroy
 
 			end
-
 		end
 	end
 end

@@ -28,9 +28,8 @@ module Api
 			def create
 				candidate = Candidate.new(candidate_params)
 				begin
-					if candidate.save
-						render json: {status: 'Success', message: 'Saved candidate', data:candidate}, status: :ok
-					end
+					candidate.save!
+					render json: {status: 'Success', message: 'Saved candidate', data:candidate}, status: :ok
 				rescue
 					render json: {status: 'Error', message: 'Candidate not saved'}, status: :unprocessable_entity
 				end
@@ -66,12 +65,7 @@ module Api
 			private
 
 			def candidate_params
-				begin
-					params.require(:candidate).permit(:name,:email,:user_id)
-			 	rescue
-			 		render json: {status: 'Error', message: 'Record not found'}, status: :ok
-			    end
-
+			  params.require(:candidate).permit(:name,:email,:user_id)
 			end
 		end
 	end
