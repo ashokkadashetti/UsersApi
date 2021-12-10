@@ -14,10 +14,16 @@ module Api
       # ..........................................................................
 
       def show
-        candidate = Candidate.find(param_id)
-        render json: { status: 'Success', message: 'User found', data: candidate }, status: :ok
-      rescue StandardError
-        render json: { status: 'Error', message: 'User not found for this id' }, status: :unprocessable_entity
+        candidate = Candidate.find_by(id: params[:id])
+        if candidate.present?
+          candidate = Candidate.find(params[:id])
+          projects = candidate.projects || []
+          render json: { status: 'Success', message: 'User found', candidate: candidate, data: projects }, status: :ok
+        else
+          raise UserNotFoundError.new('candidate not found error custom exception', 'show')
+        end
+      rescue StandardError => e
+        render json: { status: 'Error', message: e.message, action: e.action }, status: 404
       end
 
       # ...........................................................................
@@ -61,10 +67,6 @@ module Api
 
       def candidate_params
         params.require(:candidate).permit(:name, :email, :user_id)
-      end
-
-      def param_id
-        params[:id]
       end
     end
   end

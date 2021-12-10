@@ -4,6 +4,7 @@ module Api
   module V1
     # class
     class ProjectsController < ApplicationController
+      #before_action :set_project, only: %i[show update destroy]
       def index
         projects = Project.order('created_at DESC')
         render json: { status: 'Success', message: 'Loaded project', data: projects }, status: :ok
@@ -15,9 +16,10 @@ module Api
 
       def show
         project = Project.find(params[:id])
-        render json: { status: 'Success', message: 'User found', data: project }, status: :ok
+        candidates = project.candidates || []
+        render json: { status: 'Success', message: 'Project found', project: project, data: candidates }, status: :ok
       rescue StandardError
-        render json: { status: 'Error', message: 'User not found for this id' }, status: :unprocessable_entity
+        render json: { status: 'Error', message: 'Project not found for this id' }, status: :unprocessable_entity
       end
 
       # ...............................................................................................
@@ -57,6 +59,10 @@ module Api
       def project_params
         params.permit(:name, :description, :idle, :realtime, :bill)
       end
+
+      # def set_project
+      #   project = Project.find(params[:id])
+      # end
     end
   end
 end

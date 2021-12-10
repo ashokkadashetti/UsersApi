@@ -2,4 +2,5 @@
 
 # class
 class ApplicationController < ActionController::API
+  include CustomExcep
 end

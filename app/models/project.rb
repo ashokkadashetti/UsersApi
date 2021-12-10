@@ -2,7 +2,8 @@
 
 # class
 class Project < ApplicationRecord
-  has_and_belongs_to_many :candidates
+  has_many :candidates_projects
+  has_and_belongs_to_many :candidates, trough: 'candidates_projects'
 
   validates :name, presence: true
   validates :description, presence: true

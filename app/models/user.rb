@@ -5,6 +5,8 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
 
+  enum role: {manager: "manager", admin: "admin", TL: "TL"}
+
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
