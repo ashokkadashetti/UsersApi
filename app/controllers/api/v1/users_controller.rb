@@ -6,6 +6,11 @@ module Api
     class UsersController < ApplicationController
       def index
         users = User.order('created_at ASC')
+
+        # user = User.where(id:users.ids)
+        # candidate = user.to_json(except: %i[created_at updated_at], include: [candidates: { except: %i[created_at updated_at], include: [projects: {except: %i[created_at updated_at]}]} ])
+        # candi = JSON.parse(candidate)
+
         render json: { status: 'Success', message: 'Loaded users', data: users }, status: :ok
       rescue StandardError => e
         render json: { status: 'Error', message: e.message }, status: :unprocessable_entity
@@ -19,16 +24,31 @@ module Api
         usr = user.to_json(except: %i[created_at updated_at])
         user1 = JSON.parse(usr)
 
+        # option = {
+        #   include: [candidates: {include: [:projects]}]
+        # }
+
+        # render json: UserSerializer.new(user, option)
+
         # candi = CandidatesProject.where(candidate_id:candidates.ids)
         # candid = candi.to_json(include: [:candidate, :project])
         # can = JSON.parse(candid)
 
+        # candidate = user.to_json(except: %i[created_at updated_at], include: [candidates: { except: %i[created_at updated_at], include: [projects: {except: %i[created_at updated_at]}]} ])
+        # candi = JSON.parse(candidate)
+
         project = candidates.to_json(except: %i[created_at updated_at user_id], include: [projects: { only: %i[id name description bill]}])
         projects = JSON.parse(project)
 
+        # render json: candidates.to_json(except: %i[created_at updated_at user_id], include: [projects: { only: %i[id name description bill]}])
+        # project1 = JSON.parse(proj1)
+        # projects1 = JSON.parse(project1)
+
         render json: { status: 'Success', message: 'User found', user: user1, candidates: projects }, status: :ok
+
       rescue StandardError
         render json: { status: 'Error', message: 'User not found' }, status: 404
+
       end
       # ...................................................................................
 
