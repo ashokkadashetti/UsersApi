@@ -15,6 +15,8 @@
 - Implemented has_and_belongs_to_many relationship between candidates and project model.
 - Implemented exception handling for users_controller and candidates_controller.
 - Sending two table data through single json object from user api.
+- Implemented fast_json_api serializer Removed created_at and updated_at from render.
+
 
 
 
