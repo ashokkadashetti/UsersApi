@@ -5,7 +5,6 @@ module Api
     # class
     class UsersController < ApplicationController
       def index
-        #raise UserNotFoundError.new("user not fount for this id", :index)
         users = User.order('created_at ASC')
         render json: { status: 'Success', message: 'Loaded users', data: users }, status: :ok
       rescue StandardError => e
@@ -16,55 +15,20 @@ module Api
       def show
         user = User.find(params[:id])
         candidates = user.candidates || []
-        projects = hash_arr.new
-        temp = Array.new
-        if (candidates.exists?)
-          for i in 0...candidates.size
-            temp[i] = candidates[i]
-            projects[i] = candidates[i].projects
-          end  
-        end
-        hash = Hash.new
-        for i in 0...projects.size
-          hash.try_convert(projects[i])
-        end
 
+        usr = user.to_json(except: %i[created_at updated_at])
+        user1 = JSON.parse(usr)
 
-        # projects = candidates.find(candidates.ids)
-        # candidate = CandidatesProject.where(candidate_id: candidates.ids)
-        # projects = Hash.new
-        # for i in 0...candidate.size
-          
-        #   candidates[i][(Project.where(id: candidate[i].project_id))]
-          
-        # end
-        #projects = Project.where(id: candidate.project_id)
-        render json: { status: 'Success', message: 'User found', user: user, data: candidates,project:projects,temp:temp,hash:hash }, status: :ok
+        # candi = CandidatesProject.where(candidate_id:candidates.ids)
+        # candid = candi.to_json(include: [:candidate, :project])
+        # can = JSON.parse(candid)
 
+        project = candidates.to_json(except: %i[created_at updated_at user_id], include: [projects: { only: %i[id name description bill]}])
+        projects = JSON.parse(project)
 
-        #candidate = Candidate.where(id:candidates.ids)
-        #projects = candidates.find(id:candidates.ids).projects
-        
-        # projects = Array.new
-
-        # #array = Array.new[3]{Array.new[2]}
-        # if (candidates.exists?)
-        #   for i in 0...candidates.size 
-        #     projects[i] = candidates[i].projects
-        #     #array[i][1] = projects[i]
-        #   end  
-        # end
-
-        # projects = user.candidates
-
-        # candidatesProject = CandidatesProject.where(candidate_id:candidates.ids)
-        # project =  Project.where(id:(candidatesProject.ids))
-        
-
-        
-        
-        # rescue StandardError
-        #   render json: { status: 'Error', message: 'User not found' }, status: 404
+        render json: { status: 'Success', message: 'User found', user: user1, candidates: projects }, status: :ok
+      rescue StandardError
+        render json: { status: 'Error', message: 'User not found' }, status: 404
       end
       # ...................................................................................
 
@@ -95,10 +59,6 @@ module Api
       rescue StandardError
         render json: { status: 'Error', message: 'User not updated' }, status: :unprocessable_entity
       end
-
-#       def options
-#         @options || = {}
-#       end
       # ..............................................................................
 
       private
