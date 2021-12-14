@@ -14,6 +14,7 @@
 - Added Rubocop for offens detection.
 - Implemented has_and_belongs_to_many relationship between candidates and project model.
 - Implemented exception handling for users_controller and candidates_controller.
+- Sending two table data through single json object from user api.
 
 
 
