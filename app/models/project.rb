@@ -3,7 +3,7 @@
 # class
 class Project < ApplicationRecord
   has_many :candidates_projects
-  has_and_belongs_to_many :candidates, trough: 'candidates_projects'
+  has_and_belongs_to_many :candidates, through: 'candidates_projects'
 
   validates :name, presence: true
   validates :description, presence: true

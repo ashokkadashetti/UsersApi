@@ -16,9 +16,9 @@
 - Implemented exception handling for users_controller and candidates_controller.
 - Sending two table data through single json object from user api.
 - Implemented fast_json_api serializer Removed created_at and updated_at from render.
-
-
-
+- Implemented Buleprinter serializer.
+- Implemented RSpec for testing the models and controllers.
+- Created some sample simple test cases for models and controllers.
 
 ### Code to add user to two models (model => user and candidate)
 
@@ -38,6 +38,26 @@ def create
 			render json: {status: 'Error', message: 'User not saved', data:user.error}, status: :unprocessable_entity
 		end
 	end
+end
+```
+
+
+
+```ruby
+def show
+    user = User.find(params[:id])
+    candidates = user.candidates || []
+
+    usr = user.to_json(except: %i[created_at updated_at])
+    user1 = JSON.parse(usr)
+
+    project = candidates.to_json(except: %i[created_at updated_at user_id], include: [projects: { only: %i[id name description bill]}])
+    projects = JSON.parse(project)
+
+    render json: { status: 'Success', message: 'User found', user: user1, candidates: projects }, status: :ok
+
+    rescue StandardError
+      render json: { status: 'Error', message: 'User not found' }, status: 404
 end
 ```
 

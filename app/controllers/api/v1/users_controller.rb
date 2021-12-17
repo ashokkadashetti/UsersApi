@@ -6,49 +6,26 @@ module Api
     class UsersController < ApplicationController
       def index
         users = User.order('created_at ASC')
-
-        # user = User.where(id:users.ids)
-        # candidate = user.to_json(except: %i[created_at updated_at], include: [candidates: { except: %i[created_at updated_at], include: [projects: {except: %i[created_at updated_at]}]} ])
-        # candi = JSON.parse(candidate)
-
-        render json: { status: 'Success', message: 'Loaded users', data: users }, status: :ok
+        user = UserBlueprint.render_as_hash(users, view: :normal)
+        render json: { status: 'Success', message: 'Loaded users', data: user }, status: 200
       rescue StandardError => e
         render json: { status: 'Error', message: e.message }, status: :unprocessable_entity
       end
       # ...................................................................................
 
       def show
-        user = User.find(params[:id])
+        user = User.find_by(id: params[:id])
         candidates = user.candidates || []
 
         usr = user.to_json(except: %i[created_at updated_at])
         user1 = JSON.parse(usr)
 
-        # option = {
-        #   include: [candidates: {include: [:projects]}]
-        # }
-
-        # render json: UserSerializer.new(user, option)
-
-        # candi = CandidatesProject.where(candidate_id:candidates.ids)
-        # candid = candi.to_json(include: [:candidate, :project])
-        # can = JSON.parse(candid)
-
-        # candidate = user.to_json(except: %i[created_at updated_at], include: [candidates: { except: %i[created_at updated_at], include: [projects: {except: %i[created_at updated_at]}]} ])
-        # candi = JSON.parse(candidate)
-
-        project = candidates.to_json(except: %i[created_at updated_at user_id], include: [projects: { only: %i[id name description bill]}])
+        project = candidates.to_json(except: %i[created_at updated_at user_id], include: [projects: { only: %i[id name description bill] }])
         projects = JSON.parse(project)
 
-        # render json: candidates.to_json(except: %i[created_at updated_at user_id], include: [projects: { only: %i[id name description bill]}])
-        # project1 = JSON.parse(proj1)
-        # projects1 = JSON.parse(project1)
-
-        render json: { status: 'Success', message: 'User found', user: user1, candidates: projects }, status: :ok
-
+        render json: { status: 'Success', message: 'User found', user: user1, candidates: projects }, status: 302
       rescue StandardError
         render json: { status: 'Error', message: 'User not found' }, status: 404
-
       end
       # ...................................................................................
 
@@ -56,7 +33,7 @@ module Api
         user = User.new(user_params)
         if user.save
           candidate = Candidate.new(user_id: user.id, name: user.name, email: user.email)
-          render json: { status: 'Success', message: 'Record saved', data: user }, status: :ok if candidate.save
+          render json: { status: 'Success', message: 'Record saved', data: user }, status: 201 if candidate.save
         end
       rescue StandardError
         render json: { status: 'Error', message: 'User not saved' }, status: :unprocessable_entity
@@ -66,7 +43,7 @@ module Api
       def destroy
         user = User.find(params[:id])
         user.destroy!
-        render json: { status: 'Success', message: 'Deleted user', data: user }, status: :ok
+        render json: { status: 'Success', message: 'Deleted user', data: user }, status: 204
       rescue StandardError
         render json: { status: 'Error', message: 'User not destroyed' }, status: :unprocessable_entity
       end
@@ -75,7 +52,7 @@ module Api
       def update
         user = User.find(params[:id])
         user.update!(user_params)
-        render json: { status: 'Success', message: 'Updated user', data: user }, status: :ok
+        render json: { status: 'Success', message: 'Updated user', data: user }, status: 200
       rescue StandardError
         render json: { status: 'Error', message: 'User not updated' }, status: :unprocessable_entity
       end

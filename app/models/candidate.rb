@@ -8,9 +8,7 @@ class Candidate < ApplicationRecord
 
   has_and_belongs_to_many :projects, through: 'candidates_projects'
 
-  validates :name,
-            presence: true
+  validates_presence_of :name
+  validates_presence_of :email
 
-  validates :email,
-            presence: true
 end
