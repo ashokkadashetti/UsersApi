@@ -41,23 +41,19 @@ def create
 end
 ```
 
-
+### Code to fetch data from associated table using users_controller.
 
 ```ruby
 def show
     user = User.find(params[:id])
     candidates = user.candidates || []
-
     usr = user.to_json(except: %i[created_at updated_at])
     user1 = JSON.parse(usr)
-
     project = candidates.to_json(except: %i[created_at updated_at user_id], include: [projects: { only: %i[id name description bill]}])
     projects = JSON.parse(project)
-
     render json: { status: 'Success', message: 'User found', user: user1, candidates: projects }, status: :ok
-
-    rescue StandardError
-      render json: { status: 'Error', message: 'User not found' }, status: 404
+  rescue StandardError
+    srender json: { status: 'Error', message: 'User not found' }, status: 404
 end
 ```
 

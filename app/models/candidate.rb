@@ -6,7 +6,7 @@ class Candidate < ApplicationRecord
 
   has_many :candidates_projects
 
-  has_and_belongs_to_many :projects, through: 'candidates_projects'
+  has_and_belongs_to_many :projects, dependent: :destroy
 
   validates_presence_of :name
   validates_presence_of :email

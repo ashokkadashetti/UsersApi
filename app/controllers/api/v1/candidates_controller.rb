@@ -18,7 +18,7 @@ module Api
         candi = CandidateBlueprint.render_as_hash(candidate, view: :association)
         render json: { status: 'Success', message: 'User found', candidate: candi }, status: 302
       rescue StandardError => e
-        render json: { status: 'Error', message: e.message, action: e.action }, status: 404
+        render json: { status: 'Error', message: e.message }, status: 404
       end
 
       # ...........................................................................
@@ -38,7 +38,7 @@ module Api
 
       def destroy
         candidate = Candidate.find(params[:id])
-        candidate.destroy!
+        candidate.destroy
         render json: { status: 'Success' }, status: 202
       rescue StandardError
         render json: { status: 'Error', message: 'Project not destroyed' }, status: :unprocessable_entity

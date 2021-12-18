@@ -59,10 +59,6 @@ module Api
       def project_params
         params.require(:project).permit(:name, :description, :idle, :realtime, :bill)
       end
-
-      # def set_project
-      #   project = Project.find(params[:id])
-      # end
     end
   end
 end

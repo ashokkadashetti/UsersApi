@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CandidateBlueprint < Blueprinter::Base
   identifier :id
 
