@@ -17,7 +17,7 @@ describe Candidate, type: :model do
   end
 
   describe 'association' do
-    it{ is_expected.to have_and_belong_to_many(:projects)}
+    it { is_expected.to have_and_belong_to_many(:projects) }
   end
 
 end

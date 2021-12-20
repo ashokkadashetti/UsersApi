@@ -5,7 +5,7 @@ module Api
     # class
     class UsersController < ApplicationController
       def index
-        users = User.order('created_at ASC')
+        users = User.order('created_at DESC')
         user = UserBlueprint.render_as_hash(users, view: :normal)
         render json: { status: 'Success', message: 'Loaded users', data: user }, status: 200
       rescue StandardError => e

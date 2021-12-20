@@ -38,6 +38,8 @@ module Api
 
       def destroy
         candidate = Candidate.find(params[:id])
+        projects = candidate.projects
+        projects.destroy
         candidate.destroy
         render json: { status: 'Success' }, status: 202
       rescue StandardError

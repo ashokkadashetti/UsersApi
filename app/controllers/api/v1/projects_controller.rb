@@ -5,7 +5,7 @@ module Api
     # class
     class ProjectsController < ApplicationController
       def index
-        project = Project.order('created_at ASC')
+        project = Project.order('created_at DESC')
         projects = ProjectBlueprint.render_as_hash(project, view: :normal)
         render json: { status: 'Success', message: 'Loaded project', data: projects }, status: 200
       rescue StandardError
